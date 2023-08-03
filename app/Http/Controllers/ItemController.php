@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ItemController extends Controller
@@ -14,6 +16,7 @@ class ItemController extends Controller
      */
     public function index()
     {
+        // dd(Auth::user());
         return Item::orderBy('created_at', 'ASC')->get();
     }
 
