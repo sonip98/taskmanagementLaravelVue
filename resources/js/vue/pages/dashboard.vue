@@ -1,13 +1,17 @@
 <template>
-    <div class="container">
+    <div class="container">        
         <h1>Dashboard</h1>
         <TaskInput />
         <TaskStatus />
-        <TaskList />
+        <div class="spinner-border" role="status" v-if="loading">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <TaskList v-if="!loading"/>
     </div>
 </template>
 
 <script>
+import { ref } from 'vue';
 import { useStore } from 'vuex';
 import TaskInput from "./TaskInput.vue";
 import TaskList from "./TaskList.vue";
@@ -22,10 +26,12 @@ export default {
         TaskStatus
     },
     setup(){
+        const loading = ref('true');
         const store = useStore();
         const config = {
             headers: { Authorization: `Bearer ${store.getters.getToken}` }
         };
+        
         onMounted(async () => {
             await axios.get('/api/items', config).then(res=>{
                 var tasksJson = [];
@@ -39,6 +45,7 @@ export default {
                 });
                 
                 store.dispatch('loadTasks', tasksJson);
+                loading.value = false;
             }).catch(e=>{
                 // errors.value = e.response.data.message;
             })
@@ -60,6 +67,7 @@ export default {
         })
 
         return {
+            loading
         }
     }
 }
