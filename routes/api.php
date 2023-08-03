@@ -25,10 +25,13 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('register', 'register');
 });
 
-Route::get('/items', [ItemController::class, 'index']);
-Route::prefix('/item')->group( function () {
-        Route::post('/store', [ItemController::class, 'store']);
-        Route::put('/{id}', [ItemController::class, 'update']);
-        Route::delete('/{id}', [ItemController::class, 'destroy']);
-    }
-);
+Route::group(['middleware' => ['auth:sanctum']], function(){
+
+    Route::get('/items', [ItemController::class, 'index']);
+    Route::prefix('/item')->group( function () {
+            Route::post('/store', [ItemController::class, 'store']);
+            Route::put('/{id}', [ItemController::class, 'update']);
+            Route::delete('/{id}', [ItemController::class, 'destroy']);
+        }
+    );
+});

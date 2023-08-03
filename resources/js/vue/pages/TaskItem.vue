@@ -48,6 +48,10 @@
             data.completed = data.completed == true ? false : true;
         };
 
+        const config = {
+            headers: { Authorization: `Bearer ${store.getters.getToken}` }
+        };
+
         const updateTaskI = async(task) => {
             data.editing = data.editing == true ? false : true;
             if (data.editing) {
@@ -58,7 +62,7 @@
                     "completed":data.completed,
                     "name":data.taskText
                 };
-                await axios.put(`/api/item/${task.id}`, json).then(res=>{
+                await axios.put(`/api/item/${task.id}`, json, config).then(res=>{
                     task.title = data.taskText;
                     task.complete = data.completed;
                     tempStatus = data.completed;
@@ -74,7 +78,7 @@
         }
 
         const deleteTask = async(id) => {
-            await axios.delete(`/api/item/${id}`).then(res=>{
+            await axios.delete(`/api/item/${id}`, config).then(res=>{
                 store.dispatch('deleteTask', id);
                 $toast.success('Task deleted!');
             })

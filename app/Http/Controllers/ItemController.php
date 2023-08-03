@@ -16,8 +16,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        // dd(Auth::user());
-        return Item::orderBy('created_at', 'ASC')->get();
+        return Item::where('user_id', Auth::id())->orderBy('created_at', 'ASC')->get();
     }
 
     /**
@@ -47,6 +46,7 @@ class ItemController extends Controller
 
         $newItem = new Item;
         $newItem->name = $request->title;
+        $newItem->user_id = Auth::id();
         $newItem->save();
 
         $response = [
@@ -79,7 +79,7 @@ class ItemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $existingItem = Item::find($id);
+        $existingItem = Item::where('user_id', Auth::id())->find($id);
 
         if($existingItem) {
             $existingItem->completed = $request->completed ? true : false;
@@ -105,7 +105,7 @@ class ItemController extends Controller
      */
     public function destroy(string $id)
     {
-        $existingItem = Item::find($id);
+        $existingItem = Item::where('user_id', Auth::id())->find($id);
 
         if($existingItem) {
             $existingItem->delete();

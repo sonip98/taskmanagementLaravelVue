@@ -14,6 +14,7 @@ import TaskList from "./TaskList.vue";
 import TaskStatus from "./TaskStatus.vue";
 import { onMounted } from "vue";
 
+
 export default {
     components: {
         TaskInput,
@@ -22,9 +23,11 @@ export default {
     },
     setup(){
         const store = useStore();
-
+        const config = {
+            headers: { Authorization: `Bearer ${store.getters.getToken}` }
+        };
         onMounted(async () => {
-            await axios.get('/api/items').then(res=>{
+            await axios.get('/api/items', config).then(res=>{
                 var tasksJson = [];
 
                 res.data.forEach( (task) => {

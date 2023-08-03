@@ -21,6 +21,11 @@ export default {
         let task = reactive({
             title: '',
         });
+        const store = useStore();
+        
+        const config = {
+            headers: { Authorization: `Bearer ${store.getters.getToken}` }
+        };
 
         const textVisible = ref(false)
         const showText = () => {
@@ -33,13 +38,12 @@ export default {
 
         let errors = ref([]);
 
-        const store = useStore();
         const $toast = useToast();
 
 
         const addTaskI = async () => {
             errors.value = [];
-            await axios.post('/api/item/store', task).then(res => {
+            await axios.post('/api/item/store', task, config).then(res => {
                 if (res.data.success) {
                     let taskJson = {
                         id: res.data.data.id,

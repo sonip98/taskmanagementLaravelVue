@@ -24,7 +24,7 @@
                         <label for="c_password">Confirm Password:</label>
                         <input type="password" id="c_password" class="form-control" v-model="form.c_password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-dark">Register</button>
                 </form>
             </div>
         </div>
