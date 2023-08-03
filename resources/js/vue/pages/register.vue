@@ -35,6 +35,8 @@
 import { reactive, ref } from 'vue';
 import { useRouter } from "vue-router";
 import { useStore } from 'vuex';
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 export default {
     setup(){
         let form = reactive({
@@ -43,6 +45,8 @@ export default {
             password: '',
             c_password:''
         });
+
+        const $toast = useToast();
 
         const router = useRouter();
         const store = useStore();
@@ -54,6 +58,7 @@ export default {
                 if(res.data.success){
                     store.dispatch('setToken', res.data.data.token);
                     router.push({name: 'Dashboard'});
+                    $toast.success('Registered and logged in!');
                 }
             }).catch(e=>{
                 errors.value = e.response.data.message;

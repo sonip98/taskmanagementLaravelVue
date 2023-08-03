@@ -6,7 +6,7 @@
                 <router-link :to="{ name: 'Login'}" class="text-white" v-if="$store.getters.getToken == 0">Login</router-link>
             </li>
             <li class="navbar-item">
-                <router-link :to="{ name: 'Register'}" class="text-white ml-2" v-if="$store.getters.getToken == 0">Register</router-link>
+                <router-link :to="{ name: 'Register'}" class="text-white" v-if="$store.getters.getToken == 0">Register</router-link>
             </li>
             <!-- <li class="navbar-item"> -->
                 <!-- <router-link :to="{ name: 'Dashboard'}" class="text-white ml-2" v-if="$store.getters.getToken != 0">Dashboard</router-link> -->
@@ -37,3 +37,16 @@ export default {
     }
 }
 </script>
+
+<style>
+.navbar-item {
+    margin-left: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    .navbar-item {
+        margin-left: 0px;
+    }
+  }
+
+</style>

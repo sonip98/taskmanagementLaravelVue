@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h2>Task Management</h2>
+        <h1>Dashboard</h1>
         <TaskInput />
         <TaskStatus />
         <TaskList />

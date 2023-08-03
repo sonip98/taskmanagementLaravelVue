@@ -81,12 +81,21 @@ class ItemController extends Controller
         if($existingItem) {
             $existingItem->completed = $request->completed ? true : false;
             $existingItem->completed_at = $request->completed ? Carbon::now() : null;
+            $existingItem->name = $request->name != '' ? $request->name : $existingItem->name;
             $existingItem->save();
-            return $existingItem;
+
+            $response = [
+                'success' => true,
+                'data' => $existingItem,
+                'message' => 'Task updated successfully'
+            ];
+    
+            return response()->json($response, 200);
         }
 
         return "No item found";
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -97,7 +106,13 @@ class ItemController extends Controller
 
         if($existingItem) {
             $existingItem->delete();
-            return "item deleted successfully";
+            $response = [
+                'success' => true,
+                'data' => $existingItem,
+                'message' => 'Task deleted successfully'
+            ];
+    
+            return response()->json($response, 200);
         }
 
         return "No item found";

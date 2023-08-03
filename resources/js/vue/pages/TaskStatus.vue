@@ -49,18 +49,18 @@
   }
   button:hover {
     outline: none;
-    background-color: rgb(194, 243, 227);
+    background-color: #b4bac1;
   }
   .active {
     outline: none;
     color: white;
-    background-color: rgb(0, 202, 135);
+    background-color: #343a40;
   }
   .active:hover {
     outline: none;
     border: none;
     padding: 10px 20px;
     color: white;
-    background-color: rgb(0, 202, 135);
+    background-color: #343a40;
   }
   </style>

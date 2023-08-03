@@ -15,9 +15,9 @@
           </div>
         </div>
         <div class="row align-items-center">
-          <button @click="updateTaskI(task)" class="btn btn-primary mx-2">{{data.editing?'Update':'Edit'}}</button>
-          <button @click="cancelEditing()" class="btn btn-primary mx-2" v-show="data.editing">Cancel</button>
-          <button @click="deleteTask(task.id)" class="btn btn-danger">Delete</button>
+          <button @click="updateTaskI(task)" class="btn border-dark mx-2">{{data.editing?'Update':'Edit'}}</button>
+          <button @click="cancelEditing()" class="btn border border-dark mx-2" v-show="data.editing">Cancel</button>
+          <button @click="deleteTask(task.id)" class="btn btn-dark">Delete</button>
         </div>
       </div>
     </div>
@@ -25,7 +25,9 @@
   
   <script>
   import { useStore } from "vuex";
-  import { reactive } from "vue";
+  import { reactive, ref } from "vue";
+  import {useToast} from 'vue-toast-notification';
+  import 'vue-toast-notification/dist/theme-sugar.css';
   export default {
     props: {
       task: {}
@@ -33,6 +35,7 @@
 
     setup(props) {
         const store = useStore();
+        const $toast = useToast();
 
         let data = reactive({
             taskText: "",
@@ -48,19 +51,19 @@
         const updateTaskI = async(task) => {
             data.editing = data.editing == true ? false : true;
             if (data.editing) {
-                console.log("test in editing")
                 data.taskText = task.title;
                 store.dispatch('updateTask', task);
             } else {
-                await axios.put(`/api/item/${task.id}`, {"completed":data.completed}).then(res=>{
-                    // if(res.data.success){
-                        //     store.dispatch('setToken', res.data.data.token);
-                        //     router.push({name: 'Dashboard'});
-                        // }
+                let json = {
+                    "completed":data.completed,
+                    "name":data.taskText
+                };
+                await axios.put(`/api/item/${task.id}`, json).then(res=>{
                     task.title = data.taskText;
                     task.complete = data.completed;
                     tempStatus = data.completed;
-                    store.dispatch('changeCompleted', !data.completed);
+                    store.dispatch('changeCompleted', data.completed)
+                    $toast.success('Task updated!');                    
                 })
             }
         }
@@ -73,19 +76,40 @@
         const deleteTask = async(id) => {
             await axios.delete(`/api/item/${id}`).then(res=>{
                 store.dispatch('deleteTask', id);
+                $toast.success('Task deleted!');
             })
         }
+
+        
+
+       
 
         return {
             data,
             onCompleted,
             updateTaskI,
             cancelEditing,
-            deleteTask
+            deleteTask,
         }
     }
   };
   </script>
   
   <style scoped>
+
+  @media only screen and (max-width: 600px) {
+    .row {
+        flex-direction: column;
+    }
+
+    button {
+        width: fit-content;
+        margin: auto;
+        margin-top: 0.3em ;
+    }
+
+    input {
+        margin: 5px
+    };
+}
   </style>

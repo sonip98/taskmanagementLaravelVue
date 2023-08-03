@@ -26,12 +26,18 @@
 import { reactive, ref } from 'vue';
 import { useRouter } from "vue-router";
 import { useStore } from 'vuex';
+
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
 export default {
     setup(){
         let form = reactive({
             email: '',
             password: ''
         });
+
+        const $toast = useToast();        
 
         const router = useRouter();
         const store = useStore();
@@ -43,6 +49,7 @@ export default {
                 if(res.data.success){
                     store.dispatch('setToken', res.data.data.token);
                     router.push({name: 'Dashboard'});
+                    $toast.success('Logged in!');
                 }else {
                     error.value = res.data.message;
                 }

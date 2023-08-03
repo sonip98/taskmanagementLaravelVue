@@ -22,16 +22,18 @@ const store = createStore({
         },
         add_task(state, task) {
             state.tasks.push(task);
-            state.ttasks = state.tasks;
+            state.ttasks = state.tasks;            
+            state.ttasks = state.ttasks.filter((t) => t.complete == false);
         },
         delete_task(state, id) {
             state.tasks = state.tasks.filter((task) => task.id != id);
             state.ttasks = state.tasks;
+            state.ttasks = state.ttasks.filter((t) => t.complete == state.completed);
         },
         update_task(state, task) {
             let index = state.tasks.findIndex((t) => t.id == task.id);
             if (index != -1) {
-                state.todos[index] = task;
+                state.tasks[index] = task;
             }
         },
         change_complete(state, status) {
