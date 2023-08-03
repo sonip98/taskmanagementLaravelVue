@@ -19,6 +19,11 @@ class ItemController extends Controller
         return Item::where('user_id', Auth::id())->orderBy('created_at', 'ASC')->get();
     }
 
+    public function getUsers()
+    {
+        return User::all()->except(Auth::id());
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -85,6 +90,7 @@ class ItemController extends Controller
             $existingItem->completed = $request->completed ? true : false;
             $existingItem->completed_at = $request->completed ? Carbon::now() : null;
             $existingItem->name = $request->name != '' ? $request->name : $existingItem->name;
+            $existingItem->user_id = $request->user_id != 0 ? $request->user_id : $existingItem->user_id;
             $existingItem->save();
 
             $response = [

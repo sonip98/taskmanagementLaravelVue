@@ -42,6 +42,21 @@ export default {
             }).catch(e=>{
                 // errors.value = e.response.data.message;
             })
+
+            await axios.get('/api/users', config).then(res=>{
+                var namesJson = [];
+
+                res.data.forEach( (user) => {
+                    namesJson.push({
+                        id: user.id,
+                        name: user.name
+                    })
+                });
+                
+                store.dispatch('loadUsers', namesJson);
+            }).catch(e=>{
+                // errors.value = e.response.data.message;
+            })
         })
 
         return {

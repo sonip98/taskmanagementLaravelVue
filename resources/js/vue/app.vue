@@ -27,7 +27,9 @@ export default {
         const router = useRouter();
         const store = useStore();
         function logout() {
-            store.dispatch('removeToken');            
+            store.dispatch('removeToken');
+            store.dispatch('loadTasks', []);
+            store.dispatch('loadUsers', []);
             router.push({name: 'Home'});
         }
 

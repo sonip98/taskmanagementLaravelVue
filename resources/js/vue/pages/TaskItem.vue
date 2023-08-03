@@ -9,9 +9,16 @@
             type="text"
             class="col-7 form-control"
           />
+          
           <div>
             <input :checked="data.completed" class="mr-1" @change="onCompleted" type="checkbox" />
             <label class>Completed</label>
+          </div>
+          <div>
+            <select class="form-control" @change="getAssignId">
+                <option>Assign</option>
+                <option v-for="(user, index) in $store.getters.users" :key="index" :value="user.id">{{user.name}}</option>
+            </select>
           </div>
         </div>
         <div class="row align-items-center">
@@ -40,13 +47,19 @@
         let data = reactive({
             taskText: "",
             editing: false,
-            completed: props.task.complete
+            completed: props.task.complete,
+            userId: 0
         })
         var tempStatus = false;
+
         const onCompleted = () => {
             tempStatus = data.completed;
             data.completed = data.completed == true ? false : true;
         };
+
+        const getAssignId = (e) => {
+            data.userId = e.target.value;
+        }
 
         const config = {
             headers: { Authorization: `Bearer ${store.getters.getToken}` }
@@ -60,14 +73,20 @@
             } else {
                 let json = {
                     "completed":data.completed,
-                    "name":data.taskText
+                    "name":data.taskText,
+                    "user_id":data.userId
                 };
                 await axios.put(`/api/item/${task.id}`, json, config).then(res=>{
                     task.title = data.taskText;
                     task.complete = data.completed;
                     tempStatus = data.completed;
-                    store.dispatch('changeCompleted', tempStatus)
-                    $toast.success('Task updated!');                    
+                    if(data.userId > 0){
+                        store.dispatch('deleteTask', task.id);
+                        $toast.success('Assignment complete!');  
+                    }else{
+                        store.dispatch('changeCompleted', tempStatus)
+                        $toast.success('Task updated!');                    
+                    }
                 })
             }
         }
@@ -91,6 +110,7 @@
             updateTaskI,
             cancelEditing,
             deleteTask,
+            getAssignId
         }
     }
   };

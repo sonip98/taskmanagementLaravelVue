@@ -8,6 +8,7 @@ const store = createStore({
         completed: false,
         ttasks: [],
         tasks: [],
+        users: []
     },
     mutations: {
         // update variable values
@@ -19,6 +20,9 @@ const store = createStore({
             state.ttasks = state.tasks;
             state.completed = false;
             state.ttasks = state.ttasks.filter((t) => t.complete == state.completed);
+        },
+        load_users(state, users){
+            state.users = users;
         },
         add_task(state, task) {
             state.tasks.push(task);
@@ -55,6 +59,9 @@ const store = createStore({
         loadTasks(context, tasks) {
             context.commit('load_tasks', tasks)
         },
+        loadUsers(context, users) {
+            context.commit('load_users', users)
+        },
         changeCompleted(context, status) {
             context.commit("change_complete", status);
         },
@@ -76,6 +83,7 @@ const store = createStore({
         allTTasks: (state) => state.ttasks,
         allTasks: (state) => state.tasks,
         completed: (state) => state.completed,
+        users: (state) => state.users,
     }
 });
 
