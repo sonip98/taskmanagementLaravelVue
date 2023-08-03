@@ -3,7 +3,6 @@
         <p class="text-danger" v-if="errors && textVisible" v-for="error in errors" :key="error">
             <span v-for="err in error" :key="err">{{ err }}</span>
         </p>
-        <span v-if="response && textVisible" class="text-success">{{ response }}</span>
         <div class="row">
             <input v-model="task.title" class="col form-control mr-2" type="text" />
             <button @click="addTaskI" class="btn btn-dark">Add</button>
@@ -34,15 +33,12 @@ export default {
 
         let errors = ref([]);
 
-        let response = ref('');
-
         const store = useStore();
         const $toast = useToast();
 
 
         const addTaskI = async () => {
             errors.value = [];
-            response.value = '';
             await axios.post('/api/item/store', task).then(res => {
                 if (res.data.success) {
                     let taskJson = {

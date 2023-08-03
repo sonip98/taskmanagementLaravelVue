@@ -42,7 +42,7 @@
             editing: false,
             completed: props.task.complete
         })
-        var tempStatus = null;
+        var tempStatus = false;
         const onCompleted = () => {
             tempStatus = data.completed;
             data.completed = data.completed == true ? false : true;
@@ -62,14 +62,14 @@
                     task.title = data.taskText;
                     task.complete = data.completed;
                     tempStatus = data.completed;
-                    store.dispatch('changeCompleted', data.completed)
+                    store.dispatch('changeCompleted', tempStatus)
                     $toast.success('Task updated!');                    
                 })
             }
         }
 
         const cancelEditing = () => {
-            data.completed = data.completed == tempStatus ? null : tempStatus;
+            data.completed = data.completed == tempStatus ? data.completed : tempStatus;
             data.editing = data.editing == true ? false : true;
         }
 
@@ -79,9 +79,6 @@
                 $toast.success('Task deleted!');
             })
         }
-
-        
-
        
 
         return {
